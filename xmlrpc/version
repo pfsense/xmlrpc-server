@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<pfsenseupdates>
+	<firmware>
+		<time>1145119570</time>
+		<version>1.0b2</version>
+		<size>26M</size>
+                <branch>beta</branch>
+                <type>full</type>
+	</firmware>
+</pfsenseupdates>
