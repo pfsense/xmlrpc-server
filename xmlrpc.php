@@ -131,7 +131,8 @@ function get_pkgs($raw_params) {
 	else 
 		$freebsd_version = "";
 	if($params['freebsd_machine']) 
-		$freebsd_machine = "." . $params['freebsd_machine'];
+		if($params['freebsd_machine'] != "i386")
+			$freebsd_machine = "." . $params['freebsd_machine'];
 	else 
 		$freebsd_machine = "";
 
