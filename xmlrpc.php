@@ -130,15 +130,23 @@ function get_pkgs($raw_params) {
 		$freebsd_version = "." . $params['freebsd_version'];
 	else 
 		$freebsd_version = "";
-	if($params['freebsd_machine']) 
-		if($params['freebsd_machine'] != "i386")
-			$freebsd_machine = "." . $params['freebsd_machine'];
-	else 
-		$freebsd_machine = "";
+	if(!empty($params['freebsd_machine']))
+		$freebsd_machine = $params['freebsd_machine'];
+	else
+		$freebsd_machine = "i386";
 
-	$pkg_config = parse_xml_config_pkg($path_to_files . 'pkg_config' . $freebsd_version . '.xml' . $freebsd_machine, $pkg_rootobj);
+	$xml_config_file = $path_to_files . 'pkg_config' . $freebsd_version . '.xml';
+	if (file_exists($xml_config_file . '.' . $freebsd_machine))
+		$xml_config_file .= '.' . $freebsd_machine;
+
+	$pkg_config = parse_xml_config_pkg($xml_config_file, $pkg_rootobj);
 	foreach($pkg_config['packages']['package'] as $pkg) {
 		if(($params['pkg'] == 'all') or (in_array($pkg['name'], $params['pkg']))) {
+			if (isset($pkg['depends_on_package_pbi']) &&
+			    preg_match('/##ARCH##/', $pkg['depends_on_package_pbi']))
+				$pkg['depends_on_package_pbi'] = preg_replace('/##ARCH##/',
+					$freebsd_machine, $pkg['depends_on_package_pbi']);
+
 			if($params['info'] == 'all') {
 				$apkgs[$pkg['name']] = $pkg;
 			} else {
