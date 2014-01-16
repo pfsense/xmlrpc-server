@@ -141,17 +141,24 @@ function get_pkgs($raw_params) {
 
 	$pkg_config = parse_xml_config_pkg($xml_config_file, $pkg_rootobj);
 	foreach($pkg_config['packages']['package'] as $pkg) {
-		if(($params['pkg'] == 'all') or (in_array($pkg['name'], $params['pkg']))) {
-			if (isset($pkg['depends_on_package_pbi']) &&
-			    preg_match('/##ARCH##/', $pkg['depends_on_package_pbi']))
-				$pkg['depends_on_package_pbi'] = preg_replace('/##ARCH##/',
-					$freebsd_machine, $pkg['depends_on_package_pbi']);
+		if(($params['pkg'] != 'all') and (!in_array($pkg['name'], $params['pkg'])))
+			continue;
 
-			if($params['info'] == 'all') {
-				$apkgs[$pkg['name']] = $pkg;
-			} else {
-				$apkgs[$pkg['name']] = array_intersect_key($pkg, array_flip($params['info']));
-			}
+		if (!empty($pkg['only_for_archs'])) {
+			$allowed_archs = explode(' ', preg_replace('/\s+/', ' ', trim($pkg['only_for_archs'])));
+			if (!in_array($freebsd_machine, $allowed_archs))
+				continue;
+		}
+
+		if (isset($pkg['depends_on_package_pbi']) &&
+		    preg_match('/##ARCH##/', $pkg['depends_on_package_pbi']))
+			$pkg['depends_on_package_pbi'] = preg_replace('/##ARCH##/',
+				$freebsd_machine, $pkg['depends_on_package_pbi']);
+
+		if($params['info'] == 'all') {
+			$apkgs[$pkg['name']] = $pkg;
+		} else {
+			$apkgs[$pkg['name']] = array_intersect_key($pkg, array_flip($params['info']));
 		}
 	}
 	$response = XML_RPC_encode($apkgs);
