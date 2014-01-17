@@ -155,6 +155,10 @@ function get_pkgs($raw_params) {
 			$pkg['depends_on_package_pbi'] = preg_replace('/##ARCH##/',
 				$freebsd_machine, $pkg['depends_on_package_pbi']);
 
+		// On pkg_config.10.xml and later, depends_on_package_base_url is global
+		if (!empty($pkg_config['depends_on_package_base_url']))
+			$pkg['depends_on_package_base_url'] = $pkg_config['depends_on_package_base_url'];
+
 		if($params['info'] == 'all') {
 			$apkgs[$pkg['name']] = $pkg;
 		} else {
