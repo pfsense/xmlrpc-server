@@ -11,8 +11,8 @@ require_once("xmlrpc.inc");
 
 function get_firmware_version($return_php = true) {
         global $g;
-        $versioncheck_base_url = "www.pfsense.com";
-        $versioncheck_path = "/pfSense/xmlrpc.php";
+        $versioncheck_base_url = "packages.pfsense.org";
+        $versioncheck_path = "/xmlrpc.php";
         if(isset($config['system']['alt_firmware_url']['enabled']) and isset($config['system']['alt_firmware_url']['versioncheck_base_url'])) {
                 $versioncheck_base_url = $config['system']['alt_firmware_url']['versioncheck_base_url'];
         }
