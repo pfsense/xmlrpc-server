@@ -11,9 +11,10 @@ require_once("xmlrpc.inc");
 
 function get_firmware_version($return_php = true) {
         global $g;
-        $versioncheck_base_url = "www.pfsense.com";
-        $versioncheck_path = "/pfSense/xmlrpc.php";
+        $versioncheck_base_url = "packages.pfsense.org";
+        $versioncheck_path = "/xmlrpc.php";
 	$params = array(
+			"freebsd_version" => '10',
 			"pkg" => 'all',
 			"info" => array('version', 'name')
 			);

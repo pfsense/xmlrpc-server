@@ -121,7 +121,7 @@ function filter_versions($value) {
 }
 
 function get_pkgs($raw_params) {
-	$path_to_files = '../packages/';
+	$path_to_files = 'packages/';
 	$pkg_rootobj = 'pfsensepkgs';
 	$apkgs = array();
 	$toreturn = array();
